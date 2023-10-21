@@ -1,5 +1,6 @@
 from kivy.metrics import dp
 from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
 from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.screen import MDScreen
 from kivy.uix.screenmanager import ScreenManager
@@ -14,7 +15,18 @@ class WindowManager(ScreenManager):
 
 
 class Authentication(MDScreen):
-    pass
+    def switch_to_second_screen(self, email, password):
+        # Костыль
+        email_right = 'vlad'
+        password_right = 'vlad1'
+        if email == email_right and password == password_right:
+            MDApp.get_running_app().root.current = "data"
+        else: 
+            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='middle', font_size=16)
+
+            self.add_widget(label)
+            # print("Error")
+
 
 
 class MDData(MDScreen):
@@ -67,7 +79,9 @@ class MDData(MDScreen):
     def modify_and_highlight_row(self):
         if self.selected_row[4] == '0':
             self.data_tables.row_data[self.selected_row_index][4] = '1'
-            print(self.data_tables.row_data[self.selected_row_index])
+
+            print(self.data_tables.row_data[self.selected_row_index])  # индекс таблицы
+
             self.data_tables.update_row_data(
                 instance_data_table=self.data_tables, data=self.data_tables.row_data
             )
@@ -82,14 +96,14 @@ class MainApp(MDApp):
     def change_status(self, instance_button):
         self.table_screen.modify_and_highlight_row()
 
-    def switch_to_second_screen(self):
-        self.root.current = "data"
-
-    def test(self, instance):
-        email_text = self.root.ids.email_input.text
-        password_text = self.root.ids.password_input.text
-        print(email_text)
-        print(password_text)
+    '''
+    def switch_to_second_screen(self, email, password, ):
+        if email == email_right and password == password_right:
+            self.root.current = "data"
+        else: 
+            email == ''
+            password == ''
+    '''
 
 
 if __name__ == '__main__':

@@ -26,7 +26,8 @@ WindowManager:
 
             MDRaisedButton:
                 text: "Продовжити"
-                on_release: app.switch_to_second_screen()
+                on_release: root.switch_to_second_screen(email_input.text, password_input.text)
+
 
 <MDData>:
     name: "data"
