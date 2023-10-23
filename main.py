@@ -4,6 +4,7 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.screen import MDScreen
 from kivy.uix.screenmanager import ScreenManager
+from kivy.core.window import Window
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 
@@ -28,7 +29,6 @@ class Authentication(MDScreen):
             # print("Error")
 
 
-
 class MDData(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,9 +47,6 @@ class MDData(MDScreen):
                 ("Статус", dp(20)),
                 ("Створювач замовлення", dp(50)),
             ],
-            # row_data=[
-            #       [f"{i + + 1}", "info", "hehe", "Gojo", "0", "Satoro"] for i in range(0, 51) # work with db
-            # ],
             row_data=[
                 [
                     f"{i + + 1}",
@@ -90,20 +87,13 @@ class MDData(MDScreen):
 class MainApp(MDApp):
     def build(self):
         # self.theme_cls.theme_style = "Dark"
+        # self.theme_cls.primary_hue = "A700"
         # self.theme_cls.primary_palette = "Orange"
+
         self.table_screen = MDData()
 
     def change_status(self, instance_button):
         self.table_screen.modify_and_highlight_row()
-
-    '''
-    def switch_to_second_screen(self, email, password, ):
-        if email == email_right and password == password_right:
-            self.root.current = "data"
-        else: 
-            email == ''
-            password == ''
-    '''
 
 
 if __name__ == '__main__':
