@@ -3,35 +3,32 @@ from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.screen import MDScreen
-from kivy.uix.screenmanager import ScreenManager
-from kivy.core.window import Window
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 
 from db import get_all_info
 
 
-class WindowManager(ScreenManager):
-    pass
-
-
 class Authentication(MDScreen):
     def switch_to_second_screen(self, email, password):
         # Костыль
-        email_right = 'vlad'
-        password_right = 'vlad1'
+        email_right = 'a'
+        password_right = 'a'
         if email == email_right and password == password_right:
-            MDApp.get_running_app().root.current = "data"
+            MDApp.get_running_app().root.current = "data"  
         else: 
-            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='middle', font_size=16)
+            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='middle', font_size=18)
 
             self.add_widget(label)
-            # print("Error")
 
 
 class MDData(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
+        self.change_button = MDRaisedButton(text="Change status", on_release=self.change_status)
+
         info_list = get_all_info()
         self.data_tables = MDDataTable(
             use_pagination=True,
@@ -59,11 +56,14 @@ class MDData(MDScreen):
                     info_list[i][6],
                     info_list[i][7]] for i in range(len(info_list))
 
-            ]
+            ],
         )
 
         self.data_tables.bind(on_check_press=self.on_check_press)
-        self.add_widget(self.data_tables)
+        self.box_layout.add_widget(self.data_tables)
+        self.box_layout.add_widget(self.change_button)
+
+        self.add_widget(self.box_layout)
 
     def on_row_press(self, instance_table, instance_row):
         pass
@@ -83,17 +83,14 @@ class MDData(MDScreen):
                 instance_data_table=self.data_tables, data=self.data_tables.row_data
             )
 
+    def change_status(self, instance_button):
+        self.data_tables.modify_and_highlight_row()
+
 
 class MainApp(MDApp):
     def build(self):
         # self.theme_cls.theme_style = "Dark"
-        # self.theme_cls.primary_hue = "A700"
-        # self.theme_cls.primary_palette = "Orange"
-
-        self.table_screen = MDData()
-
-    def change_status(self, instance_button):
-        self.table_screen.modify_and_highlight_row()
+        self.theme_cls.primary_palette = "Orange"
 
 
 if __name__ == '__main__':

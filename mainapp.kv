@@ -1,4 +1,4 @@
-WindowManager:
+ScreenManager:
     Authentication:
     MDData:
 
@@ -28,17 +28,5 @@ WindowManager:
                 text: "Продовжити"
                 on_release: root.switch_to_second_screen(email_input.text, password_input.text)
 
-
 <MDData>:
     name: "data"
-    MDBoxLayout:
-        orientation: 'vertical'
-        padding: '30dp'
-        spacing: '24dp'
-
-        MDBoxLayout:
-            orientation: 'vertical'
-            padding: '30dp'
-            MDRaisedButton:
-                text: 'Змінити статус'
-                on_release: app.change_status()

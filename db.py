@@ -14,7 +14,7 @@ def mysql_db():
                         host=os.getenv('HOST'),
                         password=os.getenv('PASSWORD'),
                         port=3306,
-                        charset='latin1'
+                        charset='utf8'
                         )
 
         return conn
@@ -64,12 +64,11 @@ def get_all_info():
     cursor.execute('select id_material_category, remark, id_unit, xCount, date_zakaz_plan, is_plan, status, user_name from zakaz_materials')
     rows = cursor.fetchall()
     rows_list = []
-    for row in rows:  # мне нужно сделать проверку  status (отлавливать только status_index = 2)
+    for row in rows:   
+        # if int(row[6]) == 2:  # тут пусто когда статус равен 2
         rows_list.append(row)
+
     return rows_list
-    #  if int(row[6]) == 2:
-    #  rows_list.append(row)
-    # return rows_list
 
 
 # print(get_all_info())
