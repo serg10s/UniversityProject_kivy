@@ -76,6 +76,18 @@ if __name__ == '__main__':
     MainApp().run()
 
 
+def modify_and_highlight_row(self):
+    if self.selected_row[4] == '0':
+        self.data_tables.row_data[self.selected_row_index][4] = '1'
+
+        print(self.data_tables.row_data[self.selected_row_index])  # индекс таблицы
+
+        self.data_tables.update_row_data(
+            instance_data_table=self.data_tables, data=self.data_tables.row_data
+        )
+
+
+
 
 WindowManager:
     Authentication:

@@ -2,6 +2,7 @@ from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
@@ -27,7 +28,7 @@ class MDData(MDScreen):
         super().__init__(*args, **kwargs)
 
         self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
-        self.change_button = MDRaisedButton(text="Change status", on_release=self.change_status)
+        self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
 
         info_list = get_all_info()
         self.data_tables = MDDataTable(
@@ -74,17 +75,20 @@ class MDData(MDScreen):
         self.selected_row = current_row
 
     def modify_and_highlight_row(self):
-        if self.selected_row[4] == '0':
-            self.data_tables.row_data[self.selected_row_index][4] = '1'
-
-            print(self.data_tables.row_data[self.selected_row_index])  # индекс таблицы
-
-            self.data_tables.update_row_data(
-                instance_data_table=self.data_tables, data=self.data_tables.row_data
-            )
+        data = {
+            'Python': 'language-python',
+            'PHP': 'language-php',
+            'C++': 'language-cpp',
+        }
+        fab_speed_dial = MDFloatingActionButtonSpeedDial(
+            data=data,
+            root_button_anim=True
+        )
+        self.box_layout.add_widget(fab_speed_dial)
 
     def change_status(self, instance_button):
-        self.data_tables.modify_and_highlight_row()
+        # self.data_tables.modify_and_highlight_row()
+        self.modify_and_highlight_row()
 
 
 class MainApp(MDApp):
