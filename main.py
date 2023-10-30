@@ -28,41 +28,58 @@ class MDData(MDScreen):
         super().__init__(*args, **kwargs)
 
         self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
-        self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
+        # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
+        data = {
+            '1': 'clock',
+            '2': 'dots-horizontal-circle',
+            '3': 'check-circle',
+        }
+        fab_speed_dial = MDFloatingActionButtonSpeedDial(
+            data=data,
+            root_button_anim=True,
+            hint_animation=True,
+            right_pad=True,
+            size_hint=(1, .1)
+        )
 
         info_list = get_all_info()
         self.data_tables = MDDataTable(
             use_pagination=True,
             check=True,
+
             column_data=[
-                ("Номер №", dp(30)),
-                ("Назва продукту", dp(30)),
-                ("Примітка до замовлення", dp(50)),
-                ("Одиниця виміру", dp(30)),
-                ("Кількість", dp(30)),
-                ("Дата замовлення", dp(30)),
-                ("Вид", dp(20)),
-                ("Статус", dp(20)),
-                ("Створювач замовлення", dp(50)),
+                ("[size=14]№[/size]", dp(15)),
+                ("[size=12]Назва продукту[/size]", dp(20)),
+                ("[size=12]Примітка до замовлення[/size]", dp(30)),
+                ("[size=12]Одиниця виміру[/size]", dp(20)),
+                ("[size=12]Кількість[/size]", dp(20)),
+                ("[size=12]Дата замовлення[/size]", dp(20)),
+                ("[size=12]Вид[/size]", dp(20)),
+                ("[size=12]Статус[/size]", dp(20)),
+                ("[size=12]Створювач замовлення[/size]", dp(30)),
             ],
             row_data=[
                 [
-                    f"{i + + 1}",
-                    info_list[i][0],
-                    info_list[i][1],
-                    info_list[i][2],
-                    info_list[i][3],
-                    info_list[i][4],
-                    info_list[i][5],
-                    info_list[i][6],
-                    info_list[i][7]] for i in range(len(info_list))
+                    f"[size=12]{i + + 1}[/size]",
+                    f'[size=12]{info_list[i][0]}[/size]',  # здесь можна изменять как звет так и розмер текста
+                    f'[size=12]{info_list[i][1]}[/size]',
+                    f'[size=12]{info_list[i][2]}[/size]',
+                    f'[size=12]{info_list[i][3]}[/size]',
+                    f'[size=12]{info_list[i][4]}[/size]',
+                    f'[size=12]{info_list[i][5]}[/size]',
+                    f'[size=12]{info_list[i][6]}[/size]',
+                    f'[size=12]{info_list[i][7]}[/size]'] for i in range(len(info_list))
 
             ],
         )
 
+
+
         self.data_tables.bind(on_check_press=self.on_check_press)
         self.box_layout.add_widget(self.data_tables)
-        self.box_layout.add_widget(self.change_button)
+        self.box_layout.add_widget(fab_speed_dial)
+        # self.box_layout.add_widget(fab_speed_dial)
+        # self.box_layout.add_widget(self.change_button)
 
         self.add_widget(self.box_layout)
 
@@ -74,21 +91,8 @@ class MDData(MDScreen):
         print(self.selected_row_index)
         self.selected_row = current_row
 
-    def modify_and_highlight_row(self):
-        data = {
-            'Python': 'language-python',
-            'PHP': 'language-php',
-            'C++': 'language-cpp',
-        }
-        fab_speed_dial = MDFloatingActionButtonSpeedDial(
-            data=data,
-            root_button_anim=True
-        )
-        self.box_layout.add_widget(fab_speed_dial)
-
     def change_status(self, instance_button):
-        # self.data_tables.modify_and_highlight_row()
-        self.modify_and_highlight_row()
+        pass
 
 
 class MainApp(MDApp):
