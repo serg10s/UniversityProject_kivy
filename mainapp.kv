@@ -4,28 +4,44 @@ ScreenManager:
 
 <Authentication>:
     name: "auth"
-    AnchorLayout:
+
+    MDAnchorLayout:
         anchor_x: 'center'
         anchor_y: 'top'
-        MDBoxLayout:
-            orientation: "vertical"
-            size_hint_x: .5
-            size_hint_y: .5
 
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 1
+            size_hint_y: .4
             MDLabel:
                 text: "Це вікно аунтивікації"
+                theme_text_color: "Secondary"
                 halign: "center"
-                valign: "middle"
+
             MDTextField:
                 id: email_input
                 hint_text: 'Введіть email'
+                helper_text_mode: 'persistent'
+                required: True
+                size_hint: None, None
+                size: "200dp", "30dp"
+                pos_hint: {"center_x": 0.5, "y": 1}
 
             MDTextField:
                 id: password_input
                 hint_text: 'Введіть свій пароль'
+                helper_text_mode: 'on_error'
+                required: True
+                password: True
+                size_hint: None, None
+                size: "200dp", "30dp"
+                pos_hint: {"center_x": 0.5, "y": 1}
 
             MDRaisedButton:
                 text: "Продовжити"
+                size_hint: None, None
+                size: "200dp", "40dp"
+                pos_hint: {"center_x": 0.5}
                 on_release: root.switch_to_second_screen(email_input.text, password_input.text)
 
 <MDData>:

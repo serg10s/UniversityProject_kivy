@@ -5,27 +5,32 @@ from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.anchorlayout import MDAnchorLayout
 
 from db import get_all_info
 
 
 class Authentication(MDScreen):
+
+    anchor_layout = MDAnchorLayout(anchor_x='center', anchor_y='bottom')
+
     def switch_to_second_screen(self, email, password):
         # Костыль
         email_right = 'a'
         password_right = 'a'
         if email == email_right and password == password_right:
-            MDApp.get_running_app().root.current = "data"  
+            MDApp.get_running_app().root.current = "data"
         else: 
-            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='middle', font_size=18)
-
-            self.add_widget(label)
+            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='bottom', font_size=18)
+            self.anchor_layout.add_widget(label)
+            self.add_widget(self.anchor_layout)
 
 
 class MDData(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        info_list = get_all_info()  # get info from database
 
         self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
         # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
@@ -34,15 +39,13 @@ class MDData(MDScreen):
             '2': 'dots-horizontal-circle',
             '3': 'check-circle',
         }
-        fab_speed_dial = MDFloatingActionButtonSpeedDial(
+        self.fab_speed_dial = MDFloatingActionButtonSpeedDial(
             data=data,
-            root_button_anim=True,
+            # root_button_anim=True,
             hint_animation=True,
-            right_pad=True,
             size_hint=(1, .1)
         )
 
-        info_list = get_all_info()
         self.data_tables = MDDataTable(
             use_pagination=True,
             check=True,
@@ -73,14 +76,10 @@ class MDData(MDScreen):
             ],
         )
 
-
-
         self.data_tables.bind(on_check_press=self.on_check_press)
         self.box_layout.add_widget(self.data_tables)
-        self.box_layout.add_widget(fab_speed_dial)
-        # self.box_layout.add_widget(fab_speed_dial)
+        self.box_layout.add_widget(self.fab_speed_dial)
         # self.box_layout.add_widget(self.change_button)
-
         self.add_widget(self.box_layout)
 
     def on_row_press(self, instance_table, instance_row):
