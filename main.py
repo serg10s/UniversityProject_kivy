@@ -2,13 +2,14 @@ from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 from kivymd.uix.datatables import MDDataTable
-from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.menu import MDDropdownMenu
+
+from kivy.properties import StringProperty
+from kivymd.uix.list import OneLineIconListItem
 
 from db import get_all_info
 
@@ -27,6 +28,10 @@ class Authentication(MDScreen):
             label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='bottom', font_size=18)
             self.anchor_layout.add_widget(label)
             self.add_widget(self.anchor_layout)
+
+
+class IconListItem(OneLineIconListItem):
+    icon = StringProperty()
 
 
 class MDData(MDScreen):
@@ -72,9 +77,7 @@ class MDData(MDScreen):
 
         self.data_tables.bind(on_check_press=self.on_check_press)
         self.box_layout.add_widget(self.data_tables)
-        # self.box_layout.add_widget(self.fab_speed_dial)
         self.box_layout.add_widget(self.button_menu)
-        # self.box_layout.add_widget(self.change_button)
         self.add_widget(self.box_layout)
 
     def on_row_press(self, instance_table, instance_row):
@@ -90,24 +93,27 @@ class MDData(MDScreen):
 
     def menu_open(self, instance):
 
-        data = ['Статус 1', 'Статус 2', 'Статус 3']
+        data = {'Статус 1': 'clock',
+                'Статус 2': 'dots-horizontal-circle',
+                'Статус 3': 'check-circle'}
 
         menu_items = [
             {
-                "text": i,
-                "viewclass": "OneLineListItem",
-                "on_release": lambda x=f"{i}": self.menu_callback(x),
+                "text": i[0],
+                "viewclass": "IconListItem",
+                "icon": i[1],
+                "on_release": lambda x=f"{i[0]}": self.menu_callback(x),
 
-            } for i in data
+            } for i in data.items()
         ]
 
-        menu = (MDDropdownMenu(
+        menu = MDDropdownMenu(
              caller=instance,
              items=menu_items,
              width_mult=3,
              max_height=dp(178),
-             radius=[24, 0, 24, 0],
-        ))
+             radius=[12, 12, 12, 12],
+        )
 
         menu.open()
 
