@@ -6,6 +6,9 @@ from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.anchorlayout import MDAnchorLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.menu import MDDropdownMenu
 
 from db import get_all_info
 
@@ -34,36 +37,27 @@ class MDData(MDScreen):
 
         self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
         # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
-        data = {
-            '1': 'clock',
-            '2': 'dots-horizontal-circle',
-            '3': 'check-circle',
-        }
-        self.fab_speed_dial = MDFloatingActionButtonSpeedDial(
-            data=data,
-            # root_button_anim=True,
-            hint_animation=True,
-            size_hint=(1, .1)
-        )
+
+        self.button_menu = MDRaisedButton(text="Змінити статус", on_release=self.menu_open)
 
         self.data_tables = MDDataTable(
             use_pagination=True,
             check=True,
-
+            background_color_header="#f0f0f0",
             column_data=[
-                ("[size=14]№[/size]", dp(15)),
+                ("[size=14]№[/size]", dp(20)),
                 ("[size=12]Назва продукту[/size]", dp(20)),
-                ("[size=12]Примітка до замовлення[/size]", dp(30)),
+                ("[size=12]Примітка до замовлення[/size]", dp(40)),
                 ("[size=12]Одиниця виміру[/size]", dp(20)),
                 ("[size=12]Кількість[/size]", dp(20)),
                 ("[size=12]Дата замовлення[/size]", dp(20)),
                 ("[size=12]Вид[/size]", dp(20)),
                 ("[size=12]Статус[/size]", dp(20)),
-                ("[size=12]Створювач замовлення[/size]", dp(30)),
+                ("[size=12]Створювач замовлення[/size]", dp(40)),
             ],
             row_data=[
                 [
-                    f"[size=12]{i + + 1}[/size]",
+                    f"{i + + 1}",
                     f'[size=12]{info_list[i][0]}[/size]',  # здесь можна изменять как звет так и розмер текста
                     f'[size=12]{info_list[i][1]}[/size]',
                     f'[size=12]{info_list[i][2]}[/size]',
@@ -78,7 +72,8 @@ class MDData(MDScreen):
 
         self.data_tables.bind(on_check_press=self.on_check_press)
         self.box_layout.add_widget(self.data_tables)
-        self.box_layout.add_widget(self.fab_speed_dial)
+        # self.box_layout.add_widget(self.fab_speed_dial)
+        self.box_layout.add_widget(self.button_menu)
         # self.box_layout.add_widget(self.change_button)
         self.add_widget(self.box_layout)
 
@@ -92,6 +87,33 @@ class MDData(MDScreen):
 
     def change_status(self, instance_button):
         pass
+
+    def menu_open(self, instance):
+
+        data = ['Статус 1', 'Статус 2', 'Статус 3']
+
+        menu_items = [
+            {
+                "text": i,
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=f"{i}": self.menu_callback(x),
+
+            } for i in data
+        ]
+
+        menu = (MDDropdownMenu(
+             caller=instance,
+             items=menu_items,
+             width_mult=3,
+             max_height=dp(178),
+             radius=[24, 0, 24, 0],
+        ))
+
+        menu.open()
+
+    def menu_callback(self, text_item):
+        if text_item == 'Статус 1':
+            print('Скоро тут будет обработчик')
 
 
 class MainApp(MDApp):
