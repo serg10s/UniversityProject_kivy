@@ -1,3 +1,86 @@
+import pymysql
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def mysql_db():
+    try:
+
+        conn = pymysql.connect(
+                        database=os.getenv("NAME"),
+                        user=os.getenv("USER"),
+                        host=os.getenv('HOST'),
+                        password=os.getenv('PASSWORD'),
+                        port=3306,
+                        charset='utf8'
+                        )
+
+        return conn
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+# mysql_db()
+
+
+def get_zakaz_materials():
+    cursor = mysql_db().cursor()
+    cursor.execute('SELECT * FROM zakaz_materials')
+    rows = cursor.fetchall()
+    for zakaz in rows:
+        print(zakaz)
+
+
+# get_zakaz_materials()
+
+
+def get_all_columns_zakaz():
+    cursor = mysql_db().cursor()
+    cursor.execute("show columns from zakaz_materials")
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
+
+# get_all_columns_zakaz()
+
+
+def get_plan():
+    cursor = mysql_db().cursor()
+    cursor.execute('select remark from zakaz_materials')
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row[0])
+
+
+# get_plan()
+
+
+def get_all_info():
+    cursor = mysql_db().cursor()
+    cursor.execute('select id_material_category, remark, id_unit, xCount, date_zakaz_plan, is_plan, status, user_name from zakaz_materials')
+    rows = cursor.fetchall()
+    rows_list = []
+    for row in rows:
+        # if int(row[6]) == 2:  # тут пусто когда статус равен 2
+        rows_list.append(row)
+
+    return rows_list
+
+
+# print(get_all_info())
+
+
+
+
+
+
+
+
+
 from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.datatables import MDDataTable
@@ -439,6 +522,208 @@ ScreenManager:
                 size: "200dp", "40dp"
                 pos_hint: {"center_x": 0.5}
                 on_release: root.switch_to_second_screen(email_input.text, password_input.text)
+
+<MDData>:
+    name: "data"
+
+
+
+
+
+
+
+
+# work version
+from kivy.metrics import dp
+from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
+from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.anchorlayout import MDAnchorLayout
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.menu import MDDropdownMenu
+
+from kivy.properties import StringProperty
+from kivymd.uix.list import OneLineIconListItem
+
+from db import get_all_info
+
+
+class Authentication(MDScreen):
+
+    anchor_layout = MDAnchorLayout(anchor_x='center', anchor_y='bottom')
+
+    def switch_to_second_screen(self, email, password):
+        # Костыль
+        email_right = 'a'
+        password_right = 'a'
+        if email == email_right and password == password_right:
+            MDApp.get_running_app().root.current = "data"
+        else:
+            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='bottom', font_size=18)
+            self.anchor_layout.add_widget(label)
+            self.add_widget(self.anchor_layout)
+
+
+class IconListItem(OneLineIconListItem):
+    icon = StringProperty()
+
+
+class MDData(MDScreen):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        info_list = get_all_info()  # get info from database
+
+        self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
+        # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
+
+        self.button_menu = MDRaisedButton(text="Змінити статус", on_release=self.menu_open)
+
+        self.data_tables = MDDataTable(
+            use_pagination=True,
+            check=True,
+            background_color_header="#f0f0f0",
+            column_data=[
+                ("[size=14]№[/size]", dp(20)),
+                ("[size=12]Назва продукту[/size]", dp(20)),
+                ("[size=12]Примітка до замовлення[/size]", dp(40)),
+                ("[size=12]Одиниця виміру[/size]", dp(20)),
+                ("[size=12]Кількість[/size]", dp(20)),
+                ("[size=12]Дата замовлення[/size]", dp(20)),
+                ("[size=12]Вид[/size]", dp(20)),
+                ("[size=12]Статус[/size]", dp(20)),
+                ("[size=12]Створювач замовлення[/size]", dp(40)),
+            ],
+            row_data=[
+                [
+                    f"{i + + 1}",
+                    f'[size=12]{info_list[i][0]}[/size]',  # здесь можна изменять как звет так и розмер текста
+                    f'[size=12]{info_list[i][1]}[/size]',
+                    f'[size=12]{info_list[i][2]}[/size]',
+                    f'[size=12]{info_list[i][3]}[/size]',
+                    f'[size=12]{info_list[i][4]}[/size]',
+                    f'[size=12]{info_list[i][5]}[/size]',
+                    f'[size=12]{info_list[i][6]}[/size]',
+                    f'[size=12]{info_list[i][7]}[/size]'] for i in range(len(info_list))
+
+            ],
+        )
+
+        self.data_tables.bind(on_check_press=self.on_check_press)
+        self.box_layout.add_widget(self.data_tables)
+        self.box_layout.add_widget(self.button_menu)
+        self.add_widget(self.box_layout)
+
+    def on_row_press(self, instance_table, instance_row):
+        pass
+
+    def on_check_press(self, instance_table, current_row):
+        self.selected_row_index = int(current_row[0]) - 1
+        print(self.selected_row_index)
+        self.selected_row = current_row
+
+    def change_status(self, instance_button):
+        pass
+
+    def menu_open(self, instance):
+
+        data = {'Статус 1': 'clock',
+                'Статус 2': 'dots-horizontal-circle',
+                'Статус 3': 'check-circle'}
+
+        menu_items = [
+            {
+                "text": i[0],
+                "viewclass": "IconListItem",
+                "icon": i[1],
+                "on_release": lambda x=f"{i[0]}": self.menu_callback(x),
+
+            } for i in data.items()
+        ]
+
+        menu = MDDropdownMenu(
+             caller=instance,
+             items=menu_items,
+             width_mult=3,
+             max_height=dp(178),
+             radius=[12, 12, 12, 12],
+        )
+
+        menu.open()
+
+    def menu_callback(self, text_item):
+        if text_item == 'Статус 1':
+            print('Скоро тут будет обработчик')
+
+
+class MainApp(MDApp):
+    def build(self):
+        # self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "Orange"
+
+
+if __name__ == '__main__':
+    MainApp().run()
+
+
+
+
+
+
+
+ScreenManager:
+    Authentication:
+    MDData:
+
+<Authentication>:
+    name: "auth"
+
+    MDAnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'center'
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 1
+            size_hint_y: .1
+            spacing: 10
+            MDLabel:
+                text: "Вікно аутентифікації"
+                theme_text_color: "Secondary"
+                halign: "center"
+
+            MDTextField:
+                id: email_input
+                hint_text: 'Введіть email'
+                helper_text_mode: 'persistent'
+                required: True
+                size_hint: None, None
+                size: "200dp", "30dp"
+                pos_hint: {"center_x": 0.5, "y": 1}
+
+            MDTextField:
+                id: password_input
+                hint_text: 'Введіть пароль'
+                helper_text_mode: 'on_error'
+                required: True
+                password: True
+                size_hint: None, None
+                size: "200dp", "30dp"
+                pos_hint: {"center_x": 0.5, "y": 1}
+
+            MDRaisedButton:
+                text: "Продовжити"
+                size_hint: None, None
+                size: "200dp", "40dp"
+                pos_hint: {"center_x": 0.5}
+                on_release: root.switch_to_second_screen(email_input.text, password_input.text)
+
+<IconListItem>
+
+    IconLeftWidget:
+        icon: root.icon
 
 <MDData>:
     name: "data"

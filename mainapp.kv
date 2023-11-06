@@ -2,17 +2,25 @@ ScreenManager:
     Authentication:
     MDData:
 
+
+<IconListItem>
+
+    IconLeftWidget:
+        icon: root.icon
+
+
 <Authentication>:
     name: "auth"
 
     MDAnchorLayout:
         anchor_x: 'center'
-        anchor_y: 'top'
+        anchor_y: 'center'
 
         MDBoxLayout:
             orientation: 'vertical'
             size_hint_x: 1
             size_hint_y: .4
+            spacing: 10
             MDLabel:
                 text: "Вікно аутентифікації"
                 theme_text_color: "Secondary"
@@ -42,12 +50,15 @@ ScreenManager:
                 size_hint: None, None
                 size: "200dp", "40dp"
                 pos_hint: {"center_x": 0.5}
-                on_release: root.switch_to_second_screen(email_input.text, password_input.text)
+                on_release: root.switch_to_second_screen(email_input.text, password_input.text, error_label)
 
-<IconListItem>
+            MDLabel:
+                id: error_label
+                text: ''
+                them_text_color: 'Error'
+                halign: 'center'
+                valign: 'bottom'
 
-    IconLeftWidget:
-        icon: root.icon
 
 <MDData>:
     name: "data"

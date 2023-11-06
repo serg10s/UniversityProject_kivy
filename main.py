@@ -1,11 +1,12 @@
 from kivy.metrics import dp
 from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
+
 from kivymd.uix.datatables import MDDataTable
 from kivymd.uix.screen import MDScreen
+
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.button import MDRaisedButton
+
 from kivymd.uix.menu import MDDropdownMenu
 
 from kivy.properties import StringProperty
@@ -14,24 +15,21 @@ from kivymd.uix.list import OneLineIconListItem
 from db import get_all_info
 
 
+class IconListItem(OneLineIconListItem):
+    icon = StringProperty()
+
+
 class Authentication(MDScreen):
 
-    anchor_layout = MDAnchorLayout(anchor_x='center', anchor_y='bottom')
-
-    def switch_to_second_screen(self, email, password):
+    def switch_to_second_screen(self, email, password, error_label):
         # Костыль
         email_right = 'a'
         password_right = 'a'
         if email == email_right and password == password_right:
             MDApp.get_running_app().root.current = "data"
-        else: 
-            label = MDLabel(text='Error',  theme_text_color="Error", halign='center', valign='bottom', font_size=18)
-            self.anchor_layout.add_widget(label)
-            self.add_widget(self.anchor_layout)
-
-
-class IconListItem(OneLineIconListItem):
-    icon = StringProperty()
+        else:
+            error_label.text = 'Error'  # нужно дабавить ошибку когда введены не правельные данные
+            error_label.theme_text_color = "Error"  # Установите цвет текста на красный, например
 
 
 class MDData(MDScreen):
@@ -88,7 +86,7 @@ class MDData(MDScreen):
         print(self.selected_row_index)
         self.selected_row = current_row
 
-    def change_status(self, instance_button):
+    def change_status(self, instance_button):  # здесь я буду менять статус продукта
         pass
 
     def menu_open(self, instance):
@@ -119,12 +117,11 @@ class MDData(MDScreen):
 
     def menu_callback(self, text_item):
         if text_item == 'Статус 1':
-            print('Скоро тут будет обработчик')
+            print('Скоро тут буду функціонал')
 
 
 class MainApp(MDApp):
     def build(self):
-        # self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Orange"
 
 
