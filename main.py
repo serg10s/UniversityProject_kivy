@@ -28,8 +28,8 @@ class Authentication(MDScreen):
         if email == email_right and password == password_right:
             MDApp.get_running_app().root.current = "data"
         else:
-            error_label.text = 'Error'  # нужно дабавить ошибку когда введены не правельные данные
-            error_label.theme_text_color = "Error"  # Установите цвет текста на красный, например
+            error_label.text = 'Error'
+            error_label.theme_text_color = "Error"
 
 
 class MDData(MDScreen):
@@ -48,27 +48,27 @@ class MDData(MDScreen):
             check=True,
             background_color_header="#f0f0f0",
             column_data=[
-                ("[size=14]№[/size]", dp(20)),
+                ("[size=12]№[/size]", dp(20)),
                 ("[size=12]Назва продукту[/size]", dp(20)),
-                ("[size=12]Примітка до замовлення[/size]", dp(40)),
+                ("[size=12]Примітка до замовлення[/size]", dp(35)),
                 ("[size=12]Одиниця виміру[/size]", dp(20)),
                 ("[size=12]Кількість[/size]", dp(20)),
                 ("[size=12]Дата замовлення[/size]", dp(20)),
                 ("[size=12]Вид[/size]", dp(20)),
                 ("[size=12]Статус[/size]", dp(20)),
-                ("[size=12]Створювач замовлення[/size]", dp(40)),
+                ("[size=12]Створювач замовлення[/size]", dp(35)),
             ],
             row_data=[
                 [
-                    f"{i + + 1}",
-                    f'[size=12]{info_list[i][0]}[/size]',  # здесь можна изменять как звет так и розмер текста
-                    f'[size=12]{info_list[i][1]}[/size]',
-                    f'[size=12]{info_list[i][2]}[/size]',
-                    f'[size=12]{info_list[i][3]}[/size]',
-                    f'[size=12]{info_list[i][4]}[/size]',
-                    f'[size=12]{info_list[i][5]}[/size]',
-                    f'[size=12]{info_list[i][6]}[/size]',
-                    f'[size=12]{info_list[i][7]}[/size]'] for i in range(len(info_list))
+                    f"[size=10]{i + + 1}[/size]",
+                    f'[size=10]{info_list[i][0]}[/size]',  # здесь можна изменять как звет так и розмер текста
+                    f'[size=10]{info_list[i][1]}[/size]',
+                    f'[size=10]{info_list[i][2]}[/size]',
+                    f'[size=10]{info_list[i][3]}[/size]',
+                    f'[size=10]{info_list[i][4]}[/size]',
+                    f'[size=10]{info_list[i][5]}[/size]',
+                    f'[size=10]{info_list[i][6]}[/size]',
+                    f'[size=10]{info_list[i][7]}[/size]'] for i in range(len(info_list))
 
             ],
         )
@@ -82,7 +82,7 @@ class MDData(MDScreen):
         pass
 
     def on_check_press(self, instance_table, current_row):
-        self.selected_row_index = int(current_row[0]) - 1
+        self.selected_row_index = int(current_row[0].split(']')[1].split('[')[0]) - 1
         print(self.selected_row_index)
         self.selected_row = current_row
 
@@ -122,6 +122,7 @@ class MDData(MDScreen):
 
 class MainApp(MDApp):
     def build(self):
+        # self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Orange"
 
 
