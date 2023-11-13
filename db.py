@@ -29,7 +29,7 @@ def get_all_info():
     rows = cursor.fetchall()
     rows_list = []
     for row in rows:   
-        # if int(row[6]) == 2:  # тут пусто когда статус равен 2
+        #if int(row[6]) != 3:  # тут пусто когда статус равен 2
         rows_list.append(row)
 
     return rows_list

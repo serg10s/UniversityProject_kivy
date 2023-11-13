@@ -23,14 +23,14 @@ ScreenManager:
             spacing: 10
             MDLabel:
                 text: "Вікно аутентифікації"
-                theme_text_color: "Secondary"
                 halign: "center"
 
             MDTextField:
                 id: email_input
                 hint_text: 'Введіть email'
                 helper_text_mode: 'persistent'
-                required: True
+                mode: "fill"
+                color_mode: 'custom'
                 size_hint: None, None
                 size: "200dp", "30dp"
                 pos_hint: {"center_x": 0.5, "y": 1}
@@ -39,7 +39,8 @@ ScreenManager:
                 id: password_input
                 hint_text: 'Введіть пароль'
                 helper_text_mode: 'on_error'
-                required: True
+                mode: "fill"
+                color_mode: 'custom'
                 password: True
                 size_hint: None, None
                 size: "200dp", "30dp"

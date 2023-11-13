@@ -38,7 +38,7 @@ class MDData(MDScreen):
 
         info_list = get_all_info()  # get info from database
 
-        self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
+        self.box_layout = MDBoxLayout(orientation="vertical", padding="5dp", spacing="24dp")
         # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
 
         self.button_menu = MDRaisedButton(text="Змінити статус", on_release=self.menu_open)
