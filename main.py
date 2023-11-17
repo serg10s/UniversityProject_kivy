@@ -8,6 +8,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.toolbar import MDTopAppBar
 
 from kivy.properties import StringProperty
 from kivymd.uix.list import OneLineIconListItem
@@ -38,34 +39,37 @@ class MDData(MDScreen):
 
         info_list = get_all_info()  # get info from database
 
-        self.box_layout = MDBoxLayout(orientation="vertical", padding="5dp", spacing="24dp")
+        self.menu_bar = MDTopAppBar(title='MENU', left_action_items=[["menu", lambda x: x]])
+
+        self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
         # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
 
         self.button_menu = MDRaisedButton(text="Змінити статус", on_release=self.menu_open)
 
         self.data_tables = MDDataTable(
-            use_pagination=True,
+            # use_pagination=True,
             check=True,
-            background_color_header="#f0f0f0",
+            rows_num=len(get_all_info()),
+            # background_color_header="#f0f0f0",
             column_data=[
-                ("[size=12]№[/size]", dp(20)),
-                ("[size=12]Назва продукту[/size]", dp(20)),
-                ("[size=12]Примітка до замовлення[/size]", dp(35)),
-                ("[size=12]Одиниця виміру[/size]", dp(20)),
-                ("[size=12]Кількість[/size]", dp(20)),
-                ("[size=12]Дата замовлення[/size]", dp(20)),
-                ("[size=12]Вид[/size]", dp(20)),
-                ("[size=12]Статус[/size]", dp(20)),
-                ("[size=12]Створювач замовлення[/size]", dp(35)),
+                ("[size=11]№[/size]", dp(20)),
+                ("[size=11]Назва продукту[/size]", dp(20)),
+                ("[size=11]Примітка до замовлення[/size]", dp(35)),
+                ("[size=11]Одиниця виміру[/size]", dp(20)),
+                ("[size=11]Кількість[/size]", dp(20)),
+                ("[size=11]Дата замовлення[/size]", dp(25)),
+                ("[size=11]Вид[/size]", dp(15)),
+                ("[size=11]Статус[/size]", dp(15)),
+                ("[size=11]Створювач замовлення[/size]", dp(35)),
             ],
             row_data=[
                 [
                     f"[size=10]{i + + 1}[/size]",
                     f'[size=10]{info_list[i][0]}[/size]',  # здесь можна изменять как звет так и розмер текста
-                    f'[size=10]{info_list[i][1]}[/size]',
+                    f'[size=10]{str(info_list[i][1]).strip().capitalize()}[/size]',
                     f'[size=10]{info_list[i][2]}[/size]',
                     f'[size=10]{info_list[i][3]}[/size]',
-                    f'[size=10]{info_list[i][4]}[/size]',
+                    f'[size=10]{str(info_list[i][4]).replace("-", ".")}[/size]',
                     f'[size=10]{info_list[i][5]}[/size]',
                     f'[size=10]{info_list[i][6]}[/size]',
                     f'[size=10]{info_list[i][7]}[/size]'] for i in range(len(info_list))
@@ -74,6 +78,7 @@ class MDData(MDScreen):
         )
 
         self.data_tables.bind(on_check_press=self.on_check_press)
+        self.box_layout.add_widget(self.menu_bar)
         self.box_layout.add_widget(self.data_tables)
         self.box_layout.add_widget(self.button_menu)
         self.add_widget(self.box_layout)
@@ -122,7 +127,7 @@ class MDData(MDScreen):
 
 class MainApp(MDApp):
     def build(self):
-        # self.theme_cls.theme_style = "Dark"
+        self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Orange"
 
 

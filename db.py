@@ -28,8 +28,8 @@ def get_all_info():
     cursor.execute('select id_material_category, remark, id_unit, xCount, date_zakaz_plan, is_plan, status, user_name from zakaz_materials')
     rows = cursor.fetchall()
     rows_list = []
-    for row in rows:   
-        #if int(row[6]) != 3:  # тут пусто когда статус равен 2
-        rows_list.append(row)
+    for row in rows:
+        if row[6] != 3:
+            rows_list.append(row)
 
     return rows_list
