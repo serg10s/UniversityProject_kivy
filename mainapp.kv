@@ -1,6 +1,30 @@
+<Check@MDCheckbox>:
+    group: 'group'
+    size_hint: None, None
+    size: dp(48), dp(48)
+
+<DrawerClickableItem@MDNavigationDrawerItem>
+    focus_color: "#e7e4c0"
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    ripple_color: "#c5bdd2"
+    selected_color: "#0c6c4d"
+
+
+<DrawerLabelItem@MDNavigationDrawerItem>
+    text_color: "#4a4939"
+    icon_color: "#4a4939"
+    focus_behavior: False
+    selected_color: "#4a4939"
+    _no_ripple_effect: True
+
+
 ScreenManager:
     Authentication:
     MDData:
+    MainMenu:
+    SettingsMenu:
+    AccountUser:
 
 
 <IconListItem>
@@ -63,3 +87,184 @@ ScreenManager:
 
 <MDData>:
     name: "data"
+
+
+<MainMenu>
+    name: 'main_menu'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: '20dp'
+
+        MDCard:
+            orientation: "vertical"
+            padding: "8dp"
+            size_hint: None, None
+            size: "180dp", "140dp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                text: "Перший модуль з будматеріалами"
+
+            MDRaisedButton:
+                text: "Модуль 1"
+                size_hint: None, None
+                size: dp(120), dp(40)
+                pos_hint: {'center_x': 0.5}
+                on_release: root.switch_to_data()
+        MDCard:
+            orientation: "vertical"
+            padding: "8dp"
+            size_hint: None, None
+            size: "180dp", "140dp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                text: "Други модуль з будматеріалами"
+
+            MDRaisedButton:
+                size_hint: None, None
+                size: dp(120), dp(40)
+                pos_hint: {'center_x': 0.5}
+                text: "Модуль 2"
+        MDCard:
+            orientation: "vertical"
+            padding: "8dp"
+            size_hint: None, None
+            size: "180dp", "140dp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                text: "Третій модуль з будматеріалами"
+
+            MDRaisedButton:
+                size_hint: None, None
+                size: dp(120), dp(40)
+                pos_hint: {'center_x': 0.5}
+                text: "Модуль 3"
+
+    MDNavigationLayout:
+
+        MDScreenManager:
+
+            MDScreen:
+
+                MDTopAppBar:
+                    title: "Головне меню"
+                    elevation: 4
+                    pos_hint: {"top": 1}
+                    md_bg_color: "#e7e4c0"
+                    specific_text_color: "#4a4939"
+                    left_action_items:
+                        [['menu', lambda x: nav_drawer.set_state("open")]]
+
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+
+
+            MDNavigationDrawerMenu:
+
+                MDNavigationDrawerHeader:
+                    text: "Меню"
+
+                DrawerClickableItem:
+                    icon: "account"
+                    right_text: ""
+                    text_right_color: "#4a4939"
+                    text: "[size=12]Акаунт[/size]"
+                    on_release: root.switch_to_account()
+
+                DrawerClickableItem:
+                    icon: "exit-to-app"
+                    text: "[size=12]Вихід[/size]"
+                    on_release: root.switch_to_auth()
+
+                MDNavigationDrawerDivider:
+
+                MDNavigationDrawerLabel:
+                    text: "Labels"
+
+                DrawerLabelItem:
+                    icon: "information-outline"
+                    text: "[size=12]Label[/size]"
+
+                DrawerLabelItem:
+                    icon: "information-outline"
+                    text: "[size=12]Label[/size]"
+
+                # MDFloatingActionButton:
+                #    icon: "cog-outline"
+                #    on_release: root.switch_to_settings()
+
+                DrawerLabelItem:
+                    icon: "cog-outline"
+                    # text: "[size=10]Налаштування[/size]"
+                    on_release: root.switch_to_settings()
+
+
+<SettingsMenu>
+    name: 'settings'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: '10dp'
+
+        MDCard:
+            size_hint_y:None
+            height:"110dp"
+            orientation:"vertical"
+            radius:20
+            padding:"10dp"
+
+            TwoLineAvatarIconListItem:
+                text: "Зміна теми"
+                secondary_text: "         "
+
+                IconLeftWidget:
+                    icon: "images/dark-mode.png"
+                IconRightWidget:
+                    icon: "checkbox-marked" if app.theme_cls.theme_style == "Dark" else "checkbox-blank-outline"
+                    on_release:app.theme_cls.theme_style = "Light" if app.theme_cls.theme_style == "Dark" else 'Dark'
+                    # theme_text_color:'Custom'
+                    # theme_text_color: theme_cls.primary_color
+                    text_color:app.theme_cls.primary_color
+
+        MDAnchorLayout:
+            anchor_x: 'left'
+            anchor_y: 'bottom'
+
+            MDRaisedButton:
+                text: "Меню"
+                on_release: root.switch_to_menu()
+
+<AccountUser>:
+    name: 'account'
+
+    MDBoxLayout:
+        adaptive_height:True
+        orientation: "vertical"
+        pos_hint:{'center_x':.5,'center_y':.5}
+        spacing:"20dp"
+        MDBoxLayout:
+            size_hint:None,None
+            size:'120dp','120dp'
+            pos_hint:{'center_x':.5,'center_y':.5}
+            Image:
+                source: "images/profile.png"
+                allow_stretch: True
+                keep_ratio: False
+        MDLabel:
+            text:'example@email.com'
+            halign:"center"
+            adaptive_height:True
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint: (1, .2)
+        padding: '10dp'
+
+        MDRaisedButton:
+            text: "Меню"
+            on_release: root.switch_to_menu()

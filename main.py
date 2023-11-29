@@ -8,7 +8,6 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.toolbar import MDTopAppBar
 
 from kivy.properties import StringProperty
 from kivymd.uix.list import OneLineIconListItem
@@ -27,9 +26,9 @@ class Authentication(MDScreen):
         email_right = 'a'
         password_right = 'a'
         if email == email_right and password == password_right:
-            MDApp.get_running_app().root.current = "data"
+            MDApp.get_running_app().root.current = "main_menu"  # changed data
         else:
-            error_label.text = 'Error'
+            error_label.text = 'Невірний логін або пароль'
             error_label.theme_text_color = "Error"
 
 
@@ -39,10 +38,14 @@ class MDData(MDScreen):
 
         info_list = get_all_info()  # get info from database
 
+        self.button_box_layout = MDBoxLayout(spacing='10dp', size_hint=(1, .1))
+
         self.box_layout = MDBoxLayout(orientation="vertical", padding="10dp", spacing="24dp")
         # self.change_button = MDRaisedButton(text="Змінити статус", on_release=self.change_status)
 
         self.button_menu = MDRaisedButton(text="Змінити статус", on_release=self.menu_open)
+
+        self.switch_menu_button = MDRaisedButton(text='Меню', on_release=self.switch_to_menu)
 
         self.data_tables = MDDataTable(
             # use_pagination=True,
@@ -76,9 +79,17 @@ class MDData(MDScreen):
         )
 
         self.data_tables.bind(on_check_press=self.on_check_press)
-        self.box_layout.add_widget(self.menu_bar)
+
+        # main
         self.box_layout.add_widget(self.data_tables)
-        self.box_layout.add_widget(self.button_menu)
+
+        # self.box_layout.add_widget(self.button_menu)
+        # self.box_layout.add_widget(self.switch_menu_button)
+        self.button_box_layout.add_widget(self.button_menu)
+        self.button_box_layout.add_widget(self.switch_menu_button)
+
+        self.box_layout.add_widget(self.button_box_layout)
+
         self.add_widget(self.box_layout)
 
     def on_row_press(self, instance_table, instance_row):
@@ -122,8 +133,36 @@ class MDData(MDScreen):
         if text_item == 'Статус 1':
             print('Скоро тут буду функціонал')
 
+    def switch_to_menu(self, instance):
+        MDApp.get_running_app().root.current = "main_menu"
+
+
+class MainMenu(MDScreen):
+    def switch_to_data(self):
+        MDApp.get_running_app().root.current = "data"
+
+    def switch_to_settings(self):
+        MDApp.get_running_app().root.current = "settings"
+
+    def switch_to_auth(self):
+        MDApp.get_running_app().root.current = "auth"
+
+    def switch_to_account(self):
+        MDApp.get_running_app().root.current = "account"
+
+class SettingsMenu(MDScreen):
+    def switch_to_menu(self):
+        MDApp.get_running_app().root.current = "main_menu"
+
+
+class AccountUser(MDScreen):
+
+    def switch_to_menu(self):
+        MDApp.get_running_app().root.current = "main_menu"
+
 
 class MainApp(MDApp):
+
     def build(self):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Orange"
