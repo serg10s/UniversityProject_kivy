@@ -95,16 +95,19 @@ ScreenManager:
     MDBoxLayout:
         orientation: 'vertical'
         padding: '20dp'
+        spacing: '5dp'
 
         MDCard:
             orientation: "vertical"
             padding: "8dp"
+            elevation: 2
             size_hint: None, None
             size: "180dp", "140dp"
             pos_hint: {"center_x": .5, "center_y": .5}
 
             MDLabel:
                 text: "Перший модуль з будматеріалами"
+                halign: "center"
 
             MDRaisedButton:
                 text: "Модуль 1"
@@ -115,27 +118,32 @@ ScreenManager:
         MDCard:
             orientation: "vertical"
             padding: "8dp"
+            elevation: 2
             size_hint: None, None
             size: "180dp", "140dp"
             pos_hint: {"center_x": .5, "center_y": .5}
 
             MDLabel:
                 text: "Други модуль з будматеріалами"
+                halign: "center"
 
             MDRaisedButton:
                 size_hint: None, None
                 size: dp(120), dp(40)
                 pos_hint: {'center_x': 0.5}
                 text: "Модуль 2"
+
         MDCard:
             orientation: "vertical"
             padding: "8dp"
             size_hint: None, None
+            elevation: 2
             size: "180dp", "140dp"
             pos_hint: {"center_x": .5, "center_y": .5}
 
             MDLabel:
                 text: "Третій модуль з будматеріалами"
+                halign: "center"
 
             MDRaisedButton:
                 size_hint: None, None
@@ -150,10 +158,11 @@ ScreenManager:
             MDScreen:
 
                 MDTopAppBar:
-                    title: "Головне меню"
-                    elevation: 4
+                    title: "[size=18]Головне меню[/size]"
+                    elevation: 3
                     pos_hint: {"top": 1}
-                    md_bg_color: "#e7e4c0"
+                    # md_bg_color: "#e7e4c0"
+                    md_bg_color: '#87CEEB'
                     specific_text_color: "#4a4939"
                     left_action_items:
                         [['menu', lambda x: nav_drawer.set_state("open")]]
@@ -171,20 +180,20 @@ ScreenManager:
 
                 DrawerClickableItem:
                     icon: "account"
-                    right_text: ""
-                    text_right_color: "#4a4939"
+                    text_color: 'grey'
                     text: "[size=12]Акаунт[/size]"
                     on_release: root.switch_to_account()
 
                 DrawerClickableItem:
                     icon: "exit-to-app"
+                    text_color: 'grey'
                     text: "[size=12]Вихід[/size]"
                     on_release: root.switch_to_auth()
 
                 MDNavigationDrawerDivider:
 
                 MDNavigationDrawerLabel:
-                    text: "Labels"
+                    text: "Інфомація"
 
                 DrawerLabelItem:
                     icon: "information-outline"
@@ -193,14 +202,11 @@ ScreenManager:
                 DrawerLabelItem:
                     icon: "information-outline"
                     text: "[size=12]Label[/size]"
-
-                # MDFloatingActionButton:
-                #    icon: "cog-outline"
-                #    on_release: root.switch_to_settings()
 
                 DrawerLabelItem:
                     icon: "cog-outline"
-                    # text: "[size=10]Налаштування[/size]"
+                    # text: "[size=12]Налаштування[/size]"
+                    # text_color: 'grey'
                     on_release: root.switch_to_settings()
 
 
@@ -219,7 +225,7 @@ ScreenManager:
             padding:"10dp"
 
             TwoLineAvatarIconListItem:
-                text: "Зміна теми"
+                text: "[size=14]Зміна теми[/size]"
                 secondary_text: "         "
 
                 IconLeftWidget:

@@ -150,6 +150,7 @@ class MainMenu(MDScreen):
     def switch_to_account(self):
         MDApp.get_running_app().root.current = "account"
 
+
 class SettingsMenu(MDScreen):
     def switch_to_menu(self):
         MDApp.get_running_app().root.current = "main_menu"
@@ -162,10 +163,11 @@ class AccountUser(MDScreen):
 
 
 class MainApp(MDApp):
+    pass
 
-    def build(self):
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Orange"
+    #def build(self):
+        #self.theme_cls.theme_style = "Light"
+               #self. #self.theme_cls.primary_palette = 'LightBlue'
 
 
 if __name__ == '__main__':
